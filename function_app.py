@@ -22,8 +22,13 @@ SAS_TOKEN = '?sp=r&st=2025-10-10T13:22:45Z&se=2025-11-15T22:37:45Z&spr=https&sv=
 #  Fonction pour télécharger un blob via REST API + SAS Token
 def download_blob(filename: str) -> bytes:
     url = f"https://{ACCOUNT_NAME}.blob.core.windows.net/{CONTAINER_NAME}/{filename}{SAS_TOKEN}"
+    logging.info(f"📡 Tentative téléchargement: {url}")
     r = requests.get(url)
-    r.raise_for_status()
+    try:
+        r.raise_for_status()
+    except Exception as e:
+        logging.error(f"❌ Erreur téléchargement {filename}: {e} | Status={r.status_code} | Réponse={r.text}")
+        raise
     return r.content
 
 # Fonction pour charger les données une seule fois 
