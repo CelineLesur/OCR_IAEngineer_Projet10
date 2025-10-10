@@ -2,7 +2,9 @@ import azure.functions as func
 import logging 
 import json 
 import pickle 
-import pandas as pd 
+import csv
+import io
+from collections import Counter
 # from azure.storage.blob import BlobServiceClient 
 
 app = func.FunctionApp()
