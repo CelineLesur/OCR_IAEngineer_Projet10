@@ -9,9 +9,9 @@ import io
 from collections import Counter
 try:
     from azure.storage.blob import BlobServiceClient 
-except Exception as e:
+except ImportError:
     BlobServiceClient = None
-    erreur = e
+
     
 
 app = func.FunctionApp()
@@ -20,6 +20,6 @@ app = func.FunctionApp()
 @app.route(route="hello")
 def hello(req: func.HttpRequest) -> func.HttpResponse:
     if  BlobServiceClient is None :
-        return func.HttpResponse(erreur, status_code=500)
+        return func.HttpResponse("Blob non disponible", status_code=500)
     return func.HttpResponse("Hello Azure!", status_code=200)
 
