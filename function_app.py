@@ -37,18 +37,36 @@ def load_data():
 
     if EMBEDDINGS is None or METADATA is None or CLICK is None:
         logging.info("📥 Chargement des données depuis Azure Blob (REST + SAS)...")
+        try:
+            pickle_bytes = download_blob("topk_neighbors.pkl")
+            EMBEDDINGS = pickle.loads(pickle_bytes)
+            logging.info(f"✅ EMBEDDINGS chargé ({len(EMBEDDINGS)} lignes)")
+        except Exception as e:
+            logging.error(f"❌ Erreur chargement EMBEDDINGS: {e}")
+            raise
+        
+        try:
+            metadata_bytes = download_blob("articles_metadata.csv")
+            METADATA = list(csv.DictReader(io.StringIO(metadata_bytes.decode('utf-8'))))
+            logging.info(f"✅ METADATA chargé ({len(METADATA)} lignes)")
+        except Exception as e:
+            logging.error(f"❌ Erreur chargement METADATA: {e}")
+            raise
 
-        pickle_bytes = download_blob("topk_neighbors.pkl")
-        EMBEDDINGS = pickle.loads(pickle_bytes)
+        try:
+            click_bytes = download_blob("df_filtered.csv")
+            CLICK = list(csv.DictReader(io.StringIO(click_bytes.decode('utf-8'))))
+            logging.info(f"✅ CLICK chargé ({len(CLICK)} lignes)")
+        except Exception as e:
+            logging.error(f"❌ Erreur chargement CLICK: {e}")
+            raise
 
-        metadata_bytes = download_blob("articles_metadata.csv")
-        METADATA = list(csv.DictReader(io.StringIO(metadata_bytes.decode('utf-8'))))
-
-        click_bytes = download_blob("df_filtered.csv")
-        CLICK = list(csv.DictReader(io.StringIO(click_bytes.decode('utf-8'))))
-
-        INDEX_TO_ARTICLE = [row['article_id'] for row in METADATA]
-        logging.info("✅ Données chargées avec succès")
+        try:
+            INDEX_TO_ARTICLE = [row['article_id'] for row in METADATA]
+            logging.info(f"✅ INDEX_TO_ARTICLE construit ({len(INDEX_TO_ARTICLE)} articles)")
+        except Exception as e:
+            logging.error(f"❌ Erreur création INDEX_TO_ARTICLE: {e}")
+            raise
 
 # Fonction de recommandation 
 def recommend_for_user(user_id: int, top_n: int = 5): 
