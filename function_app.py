@@ -7,16 +7,15 @@ import pickle
 import csv
 import io
 from collections import Counter
+<<<<<<< HEAD
 # import pandas as pd 
+=======
+>>>>>>> 61d03e4a51399d3498ee7cb7616c93289f66e51f
 from azure.storage.blob import BlobServiceClient 
 
-app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS) 
-#Variables globales pour ne pas recharger à chaque requête 
-EMBEDDINGS = None 
-METADATA = None 
-CLICK = None 
-INDEX_TO_ARTICLE = None 
+app = func.FunctionApp()
 
+<<<<<<< HEAD
 # Paramètres Azure Blob 
 BLOB_CONNECTION_STRING = "DefaultEndpointsProtocol=https;AccountName=blobp10;AccountKey=ngvw8NnAIqHg1qkStpi9pINYcOHYSpqfKelySJaJ81KgpmQLTy37YCULObnA815Sr3e8wh6c2DoR+AStocqpZQ==;EndpointSuffix=core.windows.net" 
 CONTAINER_NAME = "containerp10" 
@@ -104,3 +103,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     )
 
 #  exemple d'appel : http://localhost:7071/api/recommendations?user_id=42
+=======
+@app.function_name(name="hello")
+@app.route(route="hello")
+def hello(req: func.HttpRequest) -> func.HttpResponse:
+    return func.HttpResponse("Hello Azure!", status_code=200)
+>>>>>>> 61d03e4a51399d3498ee7cb7616c93289f66e51f
