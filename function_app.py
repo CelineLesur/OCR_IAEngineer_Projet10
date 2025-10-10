@@ -54,7 +54,7 @@ def load_data():
             raise
 
         try:
-            click_bytes = download_blob("df_click_azure.csv")
+            click_bytes = download_blob("df_clik_azure.csv")
             CLICK = list(csv.DictReader(io.StringIO(click_bytes.decode('utf-8'))))
             logging.info(f"✅ CLICK chargé ({len(CLICK)} lignes)")
         except Exception as e:
