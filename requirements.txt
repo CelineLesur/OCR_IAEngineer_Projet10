@@ -3,6 +3,5 @@
 # azure-monitor-opentelemetry
 
 azure-functions
-pickle 
 pandas
 azure-storage-blob
