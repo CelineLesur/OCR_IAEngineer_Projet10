@@ -5,7 +5,7 @@ import pickle
 import csv
 import io
 from collections import Counter
-# from azure.storage.blob import BlobServiceClient 
+from azure.storage.blob import BlobServiceClient 
 
 app = func.FunctionApp()
 
