@@ -7,12 +7,17 @@ import pickle
 import csv
 import io
 from collections import Counter
-# from azure.storage.blob import BlobServiceClient 
+try:
+    from azure.storage.blob import BlobServiceClient 
+except ImportError:
+    BlobServiceClient = None
 
 app = func.FunctionApp()
 
 @app.function_name(name="hello")
 @app.route(route="hello")
 def hello(req: func.HttpRequest) -> func.HttpResponse:
+    if BlobServiceClient is None:
+        return func.HttpResponse("Blob SDK non disponible", status_code=500)
     return func.HttpResponse("Hello Azure!", status_code=200)
 
