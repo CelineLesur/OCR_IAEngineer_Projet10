@@ -1,5 +1,5 @@
 import sys
-sys.path.append("./.python_packages/lib/site-packages")
+sys.path.append(os.path.join(os.path.dirname(__file__),".python_packages/lib/site-packages")
 import azure.functions as func 
 import logging 
 import json 
