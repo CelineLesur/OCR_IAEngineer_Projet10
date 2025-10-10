@@ -9,7 +9,7 @@ import io
 from collections import Counter
 try:
     from azure.storage.blob import BlobServiceClient 
-except ImportError:
+except Exception as e:
     BlobServiceClient = None
     erreur =f'{e}'
     
