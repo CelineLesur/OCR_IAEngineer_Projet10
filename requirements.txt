@@ -3,8 +3,6 @@
 # azure-monitor-opentelemetry
 
 azure-functions
-logging 
-json 
 pickle 
 pandas
 azure-storage-blob
