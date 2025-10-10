@@ -1,8 +1,13 @@
+import sys
+sys.path.append("./.python_packages/lib/site-packages")
 import azure.functions as func 
 import logging 
 import json 
 import pickle 
-import pandas as pd 
+import csv
+import io
+from collections import Counter
+# import pandas as pd 
 from azure.storage.blob import BlobServiceClient 
 
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS) 
@@ -31,15 +36,17 @@ def load_data():
         # Télécharger articles_metadata.csv 
         blob_client = container_client.get_blob_client("articles_metadata.csv") 
         metadata_bytes = blob_client.download_blob().readall() 
-        METADATA = pd.read_csv(pd.io.common.BytesIO(metadata_bytes)) 
+        METADATA = list(csv.DictReader(io.StringIO(metadata_bytes.decode('utf-8'))))
+        # METADATA = pd.read_csv(pd.io.common.BytesIO(metadata_bytes)) 
         
         # Télécharger le dataframe filtrés des clicks 
         blob_client = container_client.get_blob_client("df_filtered.csv") 
         click_bytes = blob_client.download_blob().readall() 
-        CLICK = pd.read_csv(pd.io.common.BytesIO(click_bytes)) 
+        CLICK = list(csv.DictReader(io.StringIO(click_bytes.decode('utf-8'))))
+        # CLICK = pd.read_csv(pd.io.common.BytesIO(click_bytes)) 
         
         # S'assurer que les indices des embeddings et des articles correspondent 
-        INDEX_TO_ARTICLE = METADATA['article_id'].tolist() 
+        INDEX_TO_ARTICLE = [row['article_id'] for row in METADATA]
         
 # Fonction de recommandation 
 def recommend_for_user(user_id: int, top_n: int = 5): 
@@ -47,7 +54,7 @@ def recommend_for_user(user_id: int, top_n: int = 5):
     load_data() 
     
     # Liste articles cliqués par l'utilisateur 
-    click_articles = CLICK.loc[CLICK["user_id"] == user_id, "article_id"].unique() 
+    click_articles = list({row['article_id'] for row in CLICK if int(row['user_id']) == user_id})
     if len(click_articles) == 0: 
         return [] 
     
@@ -62,8 +69,10 @@ def recommend_for_user(user_id: int, top_n: int = 5):
         neighbors.extend(EMBEDDINGS[idx])
 
     # Compter les occurrences et trier
-    counts = pd.Series(neighbors).value_counts()
-    top_recos = counts.head(top_n).index.tolist()
+    counts = Counter(neighbors)
+    top_recos = [idx for idx, count in counts.most_common(top_n) if idx not in click_indices]
+    # counts = pd.Series(neighbors).value_counts()
+    # top_recos = counts.head(top_n).index.tolist()
     return [INDEX_TO_ARTICLE[i] for i in top_recos]
 
 

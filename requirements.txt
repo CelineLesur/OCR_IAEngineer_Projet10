@@ -2,7 +2,5 @@
 # Ref: aka.ms/functions-azure-monitor-python
 # azure-monitor-opentelemetry
 
-azure-functions
-pickle 
-pandas
-azure-storage-blob
+azure-functions==1.24.0
+azure-storage-blob==12.16.0
