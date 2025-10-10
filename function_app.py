@@ -17,7 +17,7 @@ INDEX_TO_ARTICLE = None
 # Paramètres Azure Blob 
 ACCOUNT_NAME = "blobp10"
 CONTAINER_NAME = "containerp10" 
-SAS_TOKEN = '?sp=r&st=2025-10-10T12:43:17Z&se=2025-10-10T20:58:17Z&spr=https&sv=2024-11-04&sr=c&sig=1KHeO2hrAT%2Fiscnle%2FpZPv75DVi5yL0y4K2oytEXWgQ%3D' #Ajout de ? au début pour que ça fonctionne
+SAS_TOKEN = '?sp=r&st=2025-10-10T13:22:45Z&se=2025-11-15T22:37:45Z&spr=https&sv=2024-11-04&sr=c&sig=WGKPoA4xI%2BmvUVuu3gy%2FE3Lx3hgS1MqbaWwEY2IqYgM%3D' #Ajout de ? au début pour que ça fonctionne
 
 #  Fonction pour télécharger un blob via REST API + SAS Token
 def download_blob(filename: str) -> bytes:
