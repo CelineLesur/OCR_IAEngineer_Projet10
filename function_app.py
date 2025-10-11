@@ -54,8 +54,8 @@ def load_data():
             raise
 
         try:
-            click_bytes = download_blob("df_clik_azure.csv")
-            CLICK = list(csv.DictReader(io.StringIO(click_bytes.decode('utf-8'))))
+            click_bytes = download_blob("df_clik_azure.pkl")
+            EMBEDDINGS = pickle.loads(click_bytes)
             logging.info(f"✅ CLICK chargé ({len(CLICK)} lignes)")
         except Exception as e:
             logging.error(f"❌ Erreur chargement CLICK: {e}")
